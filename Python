@@ -1,0 +1,17 @@
+# Datos
+mediciones = [3.10, 3.12, 3.09]
+
+# Paso 1: Calcular el promedio
+promedio = sum(mediciones) / len(mediciones)
+
+# Paso 2: Calcular el error absoluto
+errores_absolutos = [abs(d - promedio) for d in mediciones]
+error_absoluto = sum(errores_absolutos) / len(mediciones)
+
+# Paso 3: Calcular el error relativo
+error_relativo = (error_absoluto / promedio) * 100
+
+# Resultados
+print(f"Promedio: {promedio:.4f} km")
+print(f"Error absoluto: {error_absoluto:.4f} km")
+print(f"Error relativo: {error_relativo:.4f} %")
