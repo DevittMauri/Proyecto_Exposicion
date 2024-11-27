@@ -1,117 +1,99 @@
-Vamos a aplicar la **teoría de errores**
-al caso de medir la distancia desde tu casa 
-hasta una tienda usando un vehículo que registra 
-distancias en kilómetros. Como en cualquier
-medición, existen errores de precisión 
-(por ejemplo, el contador puede no ser exacto).  
+**Informe Teórico sobre la Aplicación de la Teoría de Errores en la Preparación de Alimentos**
 
-## Ejemplo de aplicación: Medición de distancia
+**Planteamiento de los Problemas**
 
-### Planteamiento del problema
-Supongamos que realizas tres mediciones 
-diferentes de la distancia desde tu casa
-hasta la tienda, y obtienes los siguientes 
-valores:  
-- \( d_1 = 3.10 \, \text{km} \)
-- \( d_2 = 3.12 \, \text{km} \)
-- \( d_3 = 3.09 \, \text{km} \)  
+En el contexto de la preparación de alimentos, especialmente en un entorno de cocina profesional, 
+se enfrentan diversos tipos de errores debido a las mediciones inexactas, fluctuaciones en las condiciones 
+del entorno (como la temperatura del horno o el tiempo de cocción) y la variabilidad inherente a los 
+ingredientes utilizados. Estos errores pueden afectar tanto la calidad de los productos finales como la eficiencia 
+de los procesos de cocción.
 
-El fabricante del odómetro indica que el error
-de medición es de \( \pm 0.02 \, \text{km} \).
-Nuestro objetivo es:
-1. Calcular el promedio de las mediciones.
-2. Determinar el error absoluto y el error 
-relativo.
-3. Validar los resultados con Python.
-4. Corroborar con un segundo ejercicio.
+En este informe, abordamos tres casos específicos que involucran el **ajuste de la cantidad de harina**, el 
+**ajuste del tiempo de horneado** y el **ajuste de la temperatura del horno**. Los objetivos de este ejercicio son:
 
----
+1. **Medir con precisión los ingredientes** (como la harina) para asegurar que la cantidad utilizada se ajuste a la receta.
+2. **Ajustar el tiempo de horneado** para evitar una cocción inadecuada, ya sea por un tiempo insuficiente o excesivo.
+3. **Controlar la temperatura del horno**, que tiene un impacto directo en la cocción de los alimentos.
 
-### Paso 1: Calcular el promedio de las 
-mediciones
-El promedio de las mediciones (\( \bar{d} \)) 
-se calcula con la fórmula:  
+Método de Heun en la Teoría de Errores
+
+El **Método de Heun** es un método de integración numérica de segundo orden utilizado para resolver ecuaciones diferenciales.
+En este contexto, lo aplicamos para ajustar mediciones y corregir errores sistemáticos, modelando los errores acumulados como
+una función lineal de la medición. La fórmula de Heun es la siguiente:
+
 \[
-\bar{d} = \frac{d_1 + d_2 + d_3}{3}
-\]  
-
-Sustituyendo los valores:  
-\[
-\bar{d} = \frac{3.10 + 3.12 + 3.09}{3} = 
-3.1033 \, \text{km} \, (\text{redondeado a
-4 decimales})
+m_{\text{ajustado}}(n+1) = m(n) + \frac{\Delta t}{2} \left[ f(m(n)) + f(m_{\text{predicho}}(n+1)) \right]
 \]
 
----
+donde:
+- \( m(n) \) es el valor actual (por ejemplo, el peso de la harina, el tiempo de cocción, o la temperatura del horno),
+- \( f(m(n)) \) es la función de error,
+- \( \Delta t \) es el paso de integración (en este caso, una unidad de iteración),
+- \( m_{\text{predicho}}(n+1) \) es el valor predicho de la medición para el siguiente paso de tiempo.
 
-### Paso 2: Calcular el error absoluto
-El **error absoluto** (\( E_a \)) se define
-como la desviación promedio de las mediciones
-respecto al valor promedio:
-\[
-E_a = \frac{\sum_{i=1}^{n} \lvert d_i - \bar{d} 
-\rvert}{n}
-\]
+Este método se aplica para cada uno de los tres casos para ajustar los valores medidos y corregir los errores.
 
-Sustituyendo:
-\[
-E_a = \frac{|3.10 - 3.1033| + |3.12 - 3.1033| 
-+ |3.09 - 3.1033|}{3} 
-\]
-\[
-E_a = \frac{0.0033 + 0.0167 + 0.0133}{3} = 
-0.0111 \, \text{km}
-\]
+#### **Cálculo de Errores**
 
----
+A continuación se muestra cómo se calcularon los errores para cada uno de los tres casos, utilizando las fórmulas de 
+error absoluto, error relativo fraccional y error porcentual:
 
-### Paso 3: Calcular el error relativo
-El **error relativo** (\( E_r \)) se define
-como el cociente entre el error absoluto y el
-valor promedio, expresado como porcentaje:
-\[
-E_r = \frac{E_a}{\bar{d}} \cdot 100
-\]
+1. **Medición de Harina**:
+   - **Valor teórico**: 205.0 g
+   - **Valor ajustado**: 205.0625 g
+   - **Error Absoluto**: 0.06250 g
+   - **Error Relativo Fraccional**: 0.00030
+   - **Error Porcentual**: 0.03049%
 
-Sustituyendo:
-\[
-E_r = \frac{0.0111}{3.1033} \cdot 100 = 
-0.3578 \, \%
-\]
+2. **Tiempo de Horneado**:
+   - **Valor teórico**: 49.5 min
+   - **Valor ajustado**: 49.725 min
+   - **Error Absoluto**: 0.22500 min
+   - **Error Relativo Fraccional**: 0.00455
+   - **Error Porcentual**: 0.45455%
 
----
+3. **Temperatura del Horno**:
+   - **Valor teórico**: 189.0°C
+   - **Valor ajustado**: 189.225°C
+   - **Error Absoluto**: 0.22500°C
+   - **Error Relativo Fraccional**: 0.00119
+   - **Error Porcentual**: 0.11905%
 
-### Paso 4: Validar con Python
-Ahora programamos el cálculo para validar los resultados:
+#### **Análisis de los Errores**
 
-```python
-# Datos
-mediciones = [3.10, 3.12, 3.09]
+Los errores calculados son relativamente pequeños, lo que indica que el método de Heun ajusta de 
+manera eficiente los valores medidos, minimizando las discrepancias entre el valor teórico y el valor ajustado. 
+El error absoluto es muy bajo en los tres casos, y el error relativo fraccional también se encuentra en un rango 
+aceptable, lo que indica que los valores ajustados son muy cercanos a los valores verdaderos.
 
-# Paso 1: Calcular el promedio
-promedio = sum(mediciones) / len(mediciones)
+- **Harina**: El pequeño error porcentual (0.03049%) sugiere que la medición de la harina es muy precisa y que el 
+ajuste mediante el método de Heun es eficaz.
+- **Tiempo de Horneado**: El error porcentual (0.45455%) es mayor en comparación con la harina, pero aún así es 
+bastante bajo para un proceso de cocción, lo que indica que el tiempo de horneado ajustado es adecuado.
+- **Temperatura del Horno**: El error porcentual (0.11905%) es también pequeño, lo que sugiere que la corrección
+de la temperatura es eficiente.
 
-# Paso 2: Calcular el error absoluto
-errores_absolutos = [abs(d - promedio) for d in mediciones]
-error_absoluto = sum(errores_absolutos) / len(mediciones)
+**Conclusiones**
 
-# Paso 3: Calcular el error relativo
-error_relativo = (error_absoluto / promedio) * 100
+1. **Eficiencia del Método de Heun**:
+   El método de Heun ha demostrado ser adecuado para ajustar los valores medidos en los tres casos. Este método 
+es más eficiente que otros métodos de integración numérica (como el método de Euler o el método de Jacobi) debido a 
+su capacidad para manejar mejor las fluctuaciones y obtener una aproximación más precisa con menos iteraciones. 
+Esto es especialmente relevante en la cocina, donde una pequeña variación en la cantidad de ingredientes, el tiempo 
+de horneado o la temperatura puede afectar significativamente el resultado.
 
-# Resultados
-print(f"Promedio: {promedio:.4f} km")
-print(f"Error absoluto: {error_absoluto:.4f} km")
-print(f"Error relativo: {error_relativo:.4f} %")
-```
+2. **Ventajas sobre Otros Métodos**:
+   - **Método de Euler**: Aunque es más simple, el método de Euler es menos preciso que Heun, ya que solo utiliza 
+el valor en el paso actual y no tiene en cuenta la corrección para el siguiente paso.
+   - **Método de Jacobi y Gauss-Seidel**: Estos métodos son más adecuados para resolver sistemas lineales de ecuaciones, 
+pero no se aplican tan eficientemente a problemas de ajustes continuos como los que se presentan en la cocina.
+   - **Método de Taylor**: Aunque también puede usarse para aproximaciones, requiere el conocimiento de derivadas de 
+orden superior, lo cual lo hace menos práctico en este contexto, donde la función de error es relativamente simple y lineal.
 
----
-
-### Paso 5: Corroborar con un ejercicio extra
-Supongamos que ahora haces cuatro mediciones:  
-\[
-d_1 = 5.02 \, \text{km}, \, d_2 = 5.00 \, \text{km},
-\, d_3 = 5.03 \, \text{km}, \, d_4 = 4.98 \,
-\text{km}
-\]
-
-Puedes usar el mismo código, solo cambiando la lista de mediciones. **Prueba calcular los resultados en Python para comparar con los obtenidos manualmente.**
+3. **Recomendaciones**:
+   - Utilizar el **Método de Heun** para ajustar mediciones y tiempos en la cocina, ya que proporciona una mayor precisión
+con un menor costo computacional en comparación con otros métodos.
+   - En situaciones donde se requiera una mayor precisión (como en la cocción de alimentos sensibles), se puede aplicar el
+método iterativo varias veces para obtener resultados más refinados.
+   - Continuar utilizando **error acumulado** como modelo de los errores, ya que ofrece un enfoque robusto para manejar
+variaciones aleatorias y sistemáticas en la preparación de alimentos.
