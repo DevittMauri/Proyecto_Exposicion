@@ -1,28 +1,55 @@
+# Código para calcular los errores en los tres casos
 
-# Función general para Heun
-def heun_method(f, x0, y0, h, n):
-    xs = [x0]
-    ys = [y0]
-    for i in range(n):
-        k1 = f(xs[i], ys[i])
-        k2 = f(xs[i] + h, ys[i] + h * k1)
-        y_next = ys[i] + (h / 2) * (k1 + k2)
-        x_next = xs[i] + h
-        xs.append(x_next)
-        ys.append(y_next)
-    return xs, ys
-
-# Calcular errores
-def calcular_errores(valor_verdadero, valor_aproximado, nombre):
-    error_absoluto = valor_verdadero - valor_aproximado
-    error_relativo = abs(error_absoluto) / valor_verdadero
-    error_porcentual = error_relativo * 100
-    print(f"\nErrores en {nombre}:")
-    print(f"Error absoluto: {error_absoluto:.4f}")
-    print(f"Error relativo: {error_relativo:.6f}")
-    print(f"Error porcentual: {error_porcentual:.4f}%")
+def calcular_errores(valor_teorico, valor_ajustado):
+    """
+    Calcula los errores absoluto, relativo fraccional y porcentual.
     
-# Datos del problema
-calcular_errores(205, 205.0625, "la medición de harina")
-calcular_errores(50, 49.725, "el tiempo de horneado")
-calcular_errores(190, 189.225, "la temperatura del horno")
+    Args:
+    valor_teorico (float): El valor verdadero o teórico.
+    valor_ajustado (float): El valor ajustado obtenido por el método.
+
+    Returns:
+    dict: Diccionario con los errores calculados.
+    """
+    # Error absoluto
+    error_absoluto = abs(valor_teorico - valor_ajustado)
+    
+    # Error relativo fraccional
+    error_relativo = error_absoluto / valor_teorico
+    
+    # Error porcentual
+    error_porcentual = error_relativo * 100
+    
+    return {
+        "Error Absoluto": error_absoluto,
+        "Error Relativo Fraccional": error_relativo,
+        "Error Porcentual": error_porcentual
+    }
+
+# Datos para los casos
+casos = {
+    "Harina": {
+        "valor_teorico": 205.0,
+        "valor_ajustado": 205.0625
+    },
+    "Tiempo de Horneado": {
+        "valor_teorico": 49.5,
+        "valor_ajustado": 49.725
+    },
+    "Temperatura del Horno": {
+        "valor_teorico": 189.0,
+        "valor_ajustado": 189.225
+    }
+}
+
+# Calcular los errores para cada caso
+resultados = {}
+for caso, datos in casos.items():
+    resultados[caso] = calcular_errores(datos["valor_teorico"], datos["valor_ajustado"])
+
+# Imprimir los resultados
+for caso, errores in resultados.items():
+    print(f"--- {caso} ---")
+    print(f"Error Absoluto: {errores['Error Absoluto']:.5f}")
+    print(f"Error Relativo Fraccional: {errores['Error Relativo Fraccional']:.5f}")
+    print(f"Error Porcentual: {errores['Error Porcentual']:.5f}%\n")
