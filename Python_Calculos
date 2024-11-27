@@ -1,0 +1,78 @@
+
+# Método de Heun para los tres casos
+
+def heun_method_general(f, x0, y0, h, n):
+    """
+    Método de Heun para resolver problemas generales.
+    f: Función del error acumulado
+    x0: Valor inicial de la variable independiente
+    y0: Valor inicial de la variable dependiente
+    h: Tamaño del paso (Δt)
+    n: Número de iteraciones
+
+    Retorna los valores ajustados después de n pasos.
+    """
+    xs = [x0]
+    ys = [y0]
+    for i in range(n):
+        # Predicción usando el método de Euler
+        k1 = f(xs[i], ys[i])
+        y_pred = ys[i] + h * k1  # Paso de predicción
+        # Corrección con el promedio de las pendientes
+        k2 = f(xs[i] + h, y_pred)
+        y_corr = ys[i] + (h / 2) * (k1 + k2)  # Paso de corrección
+        # Actualización
+        xs.append(xs[i] + h)
+        ys.append(y_corr)
+    return xs, ys
+
+
+# CASO 1: Medición de harina
+def error_harina(t, m):
+    """Función del error acumulado para la harina."""
+    k = 0.025  # Porcentaje promedio de error
+    return k * m
+
+
+# Datos iniciales para la harina
+m0_harina = 200  # Medición inicial de la harina en gramos
+dt_harina = 1    # Tamaño del paso (Δt)
+n_harina = 1     # Número de iteraciones
+
+# Aplicar el método de Heun para la harina
+t_harina, m_harina = heun_method_general(error_harina, 0, m0_harina, dt_harina, n_harina)
+print(f"Medición ajustada de harina: {m_harina[-1]:.4f} g")
+
+# CASO 2: Tiempo de horneado
+def error_tiempo(t, tiempo):
+    """Función del error acumulado para el tiempo de horneado."""
+    k = 0.1  # Porcentaje promedio de error
+    return k * tiempo
+
+
+# Datos iniciales para el tiempo
+t0_tiempo = 0  # Tiempo inicial en minutos
+t_inicial = 45  # Tiempo medido inicial
+dt_tiempo = 1   # Tamaño del paso (Δt)
+n_tiempo = 1    # Número de iteraciones
+
+# Aplicar el método de Heun para el tiempo
+t_tiempo, t_horneado = heun_method_general(error_tiempo, t0_tiempo, t_inicial, dt_tiempo, n_tiempo)
+print(f"Tiempo ajustado de horneado: {t_horneado[-1]:.4f} minutos")
+
+# CASO 3: Temperatura del horno
+def error_temperatura(t, T):
+    """Función del error acumulado para la temperatura."""
+    k = 0.05  # Porcentaje promedio de error
+    return k * T
+
+
+# Datos iniciales para la temperatura
+t0_temp = 0  # Tiempo inicial en iteración
+T_inicial = 180  # Temperatura inicial medida en °C
+dt_temp = 1   # Tamaño del paso (Δt)
+n_temp = 1    # Número de iteraciones
+
+# Aplicar el método de Heun para la temperatura
+t_temp, T_ajustada = heun_method_general(error_temperatura, t0_temp, T_inicial, dt_temp, n_temp)
+print(f"Temperatura ajustada del horno: {T_ajustada[-1]:.4f} °C")
